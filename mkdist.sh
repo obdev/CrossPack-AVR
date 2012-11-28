@@ -814,6 +814,7 @@ open $(dirname "$dmg")
 #########################################################################
 
 echo "=== cleaning up..."
+rm -rf "$osxpkgtmp"
 if ! "$debug"; then
     rm -f "/tmp/$pkgUnixName.pkg"
     rm -rf compile  # source and objects are HUGE
