@@ -291,11 +291,12 @@ buildPackage() # <package-name> <known-product> <additional-config-args...>
     name="$1"
     product="$2"
     if [ -f "$product" ]; then
+        echo "Skipping build of $name because it's already built"
         return  # the product we generate exists already
     fi
     shift; shift
     echo "################################################################################"
-    echo "Building $name"
+    echo "Building $name at $(date +"%Y-%m-%d %H:%M:%S")"
     echo "################################################################################"
     cwd=$(pwd)
 	base=$(echo "$name" | sed -e 's/-[.0-9]\{1,\}$//g')
