@@ -1,0 +1,52 @@
+diff -ruwN darwin.c.orig darwin.c
+--- darwin.c.orig	2006-03-04 03:52:46.000000000 +0100
++++ darwin.c	2012-02-15 12:25:18.000000000 +0100
+@@ -247,7 +247,8 @@
+   io_cf_plugin_ref_t *plugInInterface = NULL;
+   usb_device_t **device;
+   io_service_t usbDevice;
+-  long result, score;
++  long result;
++  SInt32 score;
+ 
+   if (!IOIteratorIsValid (deviceIterator) || !(usbDevice = IOIteratorNext(deviceIterator)))
+     return NULL;
+@@ -447,7 +448,7 @@
+   IOUSBFindInterfaceRequest request;
+ 
+   struct darwin_dev_handle *device;
+-  long score;
++  SInt32 score;
+   int current_interface;
+ 
+   device = dev->impl_info;
+@@ -769,9 +770,9 @@
+ 
+   if (usb_debug > 2)
+     fprintf(stderr, "io async operation completed: %s, size=%lu, result=0x%08x\n", darwin_error_str(result),
+-	    (UInt32)io_size, result);
++	    (unsigned long)io_size, (int)result);
+ 
+-  rw_arg->io_size = (UInt32)io_size;
++  rw_arg->io_size = (long)io_size;
+   rw_arg->result  = result;
+ 
+   CFRunLoopStop(rw_arg->cf_loop);
+@@ -1064,7 +1065,7 @@
+     result = (*(device))->GetDeviceAddress(device, (USBDeviceAddress *)&address);
+ 
+     if (usb_debug >= 2)
+-      fprintf(stderr, "usb_os_find_devices: Found USB device at location 0x%08lx\n", location);
++      fprintf(stderr, "usb_os_find_devices: Found USB device at location 0x%08lx\n", (long)location);
+ 
+     /* first byte of location appears to be associated with the device's bus */
+     if (location >> 24 == bus_loc >> 24) {
+@@ -1092,7 +1093,7 @@
+ 
+       if (usb_debug >= 2)
+ 	fprintf(stderr, "usb_os_find_devices: Found %s on %s at location 0x%08lx\n",
+-		dev->filename, bus->dirname, location);
++		dev->filename, bus->dirname, (long)location);
+     }
+ 
+     /* release the device now */

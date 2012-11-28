@@ -1,0 +1,8 @@
+.DS_Store
+._*
+xcuserdata
+/patches
+/manual
+/packages
+/compile
+/math

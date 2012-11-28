@@ -1,0 +1,76 @@
+<?include "header.php"?>
+<h1>Overview</h1>
+<h2>What is <?echo $pkgname?>?</h2>
+<?echo $pkgname?> is a development environment for <a href="http://www.atmel.com/products/AVR/" target="_blank">Atmel's AVR microcontrollers</a> running on Apple's Mac OS X, similar to <a href="http://winavr.sourceforge.net/" target="_blank">WinAVR</a> for Windows. It consists of the GNU compiler suite, a C library for the AVR, the AVRDUDE uploader and several other useful tools.
+
+<?echo $pkgname?> consists of the following packages:
+<ul>
+<?
+	global $prefix;
+	$fp = fopen("$prefix/versions.txt", "r");
+	while($line = fgets($fp, 1000)){
+		$line = trim($line);
+		ereg('^(.*): (.*)$', $line, $regs);
+		$package = $regs[1];
+		$version = $regs[2];
+		switch($package){
+            case "binutils":
+            case "make":
+                $package = "GNU $package";
+                break;
+		}
+		echo "<li>$package in version $version</li>\n";
+	}
+	fclose($fp);
+?>
+</ul>
+
+<h2>Supported Devices</h2>
+<h3>Devices supported by <tt>avr-gcc</tt></h3>
+<?
+function gccDevices($gccVersion)
+{
+	global $prefix;
+	//system("$prefix/bin/avr-gcc-select $gccVersion >/dev/null 2>&1");
+	$devices = array();
+	$fp = popen("$prefix/bin/avr-gcc --target-help -mlist-devices | grep __AVR", "r");
+	while($line = fgets($fp, 1000)){
+        $arr = explode(" ", $line, 2);
+        $devices[] = $arr[0];
+	}
+	pclose($fp);
+	sort($devices, SORT_STRING);
+	for($i = 0; $i < count($devices); $i++){
+		if($i != 0){
+			echo ", ";
+		}
+		echo $devices[$i];
+	}
+}
+
+	gccDevices("4");
+?>
+
+<h3>Devices supported by the assembler <tt>avr-as</tt></h3>
+<?
+	$devices = array();
+	$fp = popen("echo | $prefix/bin/avr-as -mmcu=x - 2>&1", "r");
+	while($line = fgets($fp, 1000)){
+		$line = trim($line);
+		if($line == "" || eregi('known', $line) || eregi('assembler', $line) || eregi('fatal', $line))
+			continue;
+		$list = explode(" ", $line);
+		for($i = 0; $i < count($list); $i++){
+			$devices[] = $list[$i];
+		}
+	}
+	pclose($fp);
+	sort($devices, SORT_STRING);
+	for($i = 0; $i < count($devices); $i++){
+		if($i != 0){
+			echo ", ";
+		}
+		echo $devices[$i];
+	}
+?>
+<?include "footer.php"?>

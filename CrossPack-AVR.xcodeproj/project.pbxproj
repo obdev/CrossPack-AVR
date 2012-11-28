@@ -1,0 +1,256 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		4066DB6314EAA6220051D0F4 /* mkdist.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = mkdist.sh; sourceTree = "<group>"; };
+		4066DB6714EBD0BC0051D0F4 /* 010-fix-64-bit.patch */ = {isa = PBXFileReference; lastKnownFileType = text; path = "010-fix-64-bit.patch"; sourceTree = "<group>"; };
+		4066DB6914EBEE560051D0F4 /* 20-gcc-binary-constants.patch */ = {isa = PBXFileReference; lastKnownFileType = text; path = "20-gcc-binary-constants.patch"; sourceTree = "<group>"; };
+		4066DB6A14EBEE560051D0F4 /* 21-gcc-avr-misspelled-sig-1.patch */ = {isa = PBXFileReference; lastKnownFileType = text; path = "21-gcc-avr-misspelled-sig-1.patch"; sourceTree = "<group>"; };
+		4066DB6B14EBEE560051D0F4 /* 60-new-devices.patch */ = {isa = PBXFileReference; lastKnownFileType = text; path = "60-new-devices.patch"; sourceTree = "<group>"; };
+		4066DB7014EC5E8C0051D0F4 /* Readme.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Readme.rtf; sourceTree = "<group>"; };
+		4066DB7B14EC5E8C0051D0F4 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		4066DB7C14EC5E8C0051D0F4 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		4066DB7D14EC5E8C0051D0F4 /* TemplateProject.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TemplateProject.xcodeproj; sourceTree = "<group>"; };
+		4066DB8514EC81B00051D0F4 /* documentation.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = documentation.html; sourceTree = "<group>"; };
+		4066DB8614EC81B00051D0F4 /* footer.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = footer.php; sourceTree = "<group>"; };
+		4066DB8714EC81B00051D0F4 /* gettingstarted.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = gettingstarted.html; sourceTree = "<group>"; };
+		4066DB8814EC81B00051D0F4 /* header.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = header.php; sourceTree = "<group>"; };
+		4066DB8914EC81B00051D0F4 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		4066DB8A14EC81B00051D0F4 /* installation.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = installation.html; sourceTree = "<group>"; };
+		4066DB8B14EC81B00051D0F4 /* licenses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
+		4066DB8C14EC81B00051D0F4 /* links.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = links.html; sourceTree = "<group>"; };
+		4066DB8D14EC81B00051D0F4 /* mkmanual.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = mkmanual.sh; sourceTree = "<group>"; };
+		4066DB8E14EC81B00051D0F4 /* releasenotes.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = releasenotes.html; sourceTree = "<group>"; };
+		4066DB9014EC81B00051D0F4 /* logo150.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo150.jpg; sourceTree = "<group>"; };
+		4066DB9114EC81B00051D0F4 /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		4066DB9414ECF9D90051D0F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = ReadMe.rtf; sourceTree = "<group>"; };
+		4066DB9614ECF9D90051D0F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = Welcome.rtf; sourceTree = "<group>"; };
+		406D9473166655FD004D70FD /* mkclean.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = mkclean.sh; sourceTree = "<group>"; };
+		406D9474166655FD004D70FD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		406D947716665618004D70FD /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
+		406D947916665641004D70FD /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = postinstall; sourceTree = "<group>"; };
+		406D947A16665653004D70FD /* background.jp2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = background.jp2; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		4066DB5714EAA5C00051D0F4 = {
+			isa = PBXGroup;
+			children = (
+				406D9473166655FD004D70FD /* mkclean.sh */,
+				4066DB6314EAA6220051D0F4 /* mkdist.sh */,
+				406D9474166655FD004D70FD /* README.md */,
+				406D947716665618004D70FD /* License.txt */,
+				4066DB8414EC81B00051D0F4 /* manual-source */,
+				4066DB6C14EC5E8C0051D0F4 /* package-info */,
+				4066DB7814EC5E8C0051D0F4 /* templates */,
+				4066DB6514EBD0BC0051D0F4 /* patches-local */,
+			);
+			sourceTree = "<group>";
+		};
+		4066DB6514EBD0BC0051D0F4 /* patches-local */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB6814EBEE560051D0F4 /* gcc-3.4.6 */,
+				4066DB6614EBD0BC0051D0F4 /* libusb-0.1.12 */,
+			);
+			path = "patches-local";
+			sourceTree = "<group>";
+		};
+		4066DB6614EBD0BC0051D0F4 /* libusb-0.1.12 */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB6714EBD0BC0051D0F4 /* 010-fix-64-bit.patch */,
+			);
+			path = "libusb-0.1.12";
+			sourceTree = "<group>";
+		};
+		4066DB6814EBEE560051D0F4 /* gcc-3.4.6 */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB6914EBEE560051D0F4 /* 20-gcc-binary-constants.patch */,
+				4066DB6A14EBEE560051D0F4 /* 21-gcc-avr-misspelled-sig-1.patch */,
+				4066DB6B14EBEE560051D0F4 /* 60-new-devices.patch */,
+			);
+			path = "gcc-3.4.6";
+			sourceTree = "<group>";
+		};
+		4066DB6C14EC5E8C0051D0F4 /* package-info */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB7014EC5E8C0051D0F4 /* Readme.rtf */,
+				4066DB7114EC5E8C0051D0F4 /* Resources */,
+				406D947816665641004D70FD /* scripts */,
+			);
+			path = "package-info";
+			sourceTree = "<group>";
+		};
+		4066DB7114EC5E8C0051D0F4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				406D947A16665653004D70FD /* background.jp2 */,
+				4066DB9214ECF9D90051D0F4 /* en.lproj */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4066DB7814EC5E8C0051D0F4 /* templates */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB7914EC5E8C0051D0F4 /* TemplateProject */,
+			);
+			path = templates;
+			sourceTree = "<group>";
+		};
+		4066DB7914EC5E8C0051D0F4 /* TemplateProject */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB7A14EC5E8C0051D0F4 /* firmware */,
+				4066DB7D14EC5E8C0051D0F4 /* TemplateProject.xcodeproj */,
+			);
+			path = TemplateProject;
+			sourceTree = "<group>";
+		};
+		4066DB7A14EC5E8C0051D0F4 /* firmware */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB7B14EC5E8C0051D0F4 /* main.c */,
+				4066DB7C14EC5E8C0051D0F4 /* Makefile */,
+			);
+			path = firmware;
+			sourceTree = "<group>";
+		};
+		4066DB7E14EC5E8C0051D0F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4066DB8414EC81B00051D0F4 /* manual-source */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB8514EC81B00051D0F4 /* documentation.html */,
+				4066DB8614EC81B00051D0F4 /* footer.php */,
+				4066DB8714EC81B00051D0F4 /* gettingstarted.html */,
+				4066DB8814EC81B00051D0F4 /* header.php */,
+				4066DB8914EC81B00051D0F4 /* index.html */,
+				4066DB8A14EC81B00051D0F4 /* installation.html */,
+				4066DB8B14EC81B00051D0F4 /* licenses.html */,
+				4066DB8C14EC81B00051D0F4 /* links.html */,
+				4066DB8D14EC81B00051D0F4 /* mkmanual.sh */,
+				4066DB8E14EC81B00051D0F4 /* releasenotes.html */,
+				4066DB8F14EC81B00051D0F4 /* resources */,
+			);
+			path = "manual-source";
+			sourceTree = "<group>";
+		};
+		4066DB8F14EC81B00051D0F4 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB9014EC81B00051D0F4 /* logo150.jpg */,
+				4066DB9114EC81B00051D0F4 /* style.css */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		4066DB9214ECF9D90051D0F4 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				4066DB9314ECF9D90051D0F4 /* ReadMe.rtf */,
+				4066DB9514ECF9D90051D0F4 /* Welcome.rtf */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
+		406D947816665641004D70FD /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				406D947916665641004D70FD /* postinstall */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		4066DB5914EAA5C00051D0F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Objective Development Software GmbH";
+			};
+			buildConfigurationList = 4066DB5C14EAA5C00051D0F4 /* Build configuration list for PBXProject "CrossPack-AVR" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				English,
+			);
+			mainGroup = 4066DB5714EAA5C00051D0F4;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4066DB7E14EC5E8C0051D0F4 /* Products */;
+					ProjectRef = 4066DB7D14EC5E8C0051D0F4 /* TemplateProject.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXVariantGroup section */
+		4066DB9314ECF9D90051D0F4 /* ReadMe.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4066DB9414ECF9D90051D0F4 /* en */,
+			);
+			name = ReadMe.rtf;
+			sourceTree = "<group>";
+		};
+		4066DB9514ECF9D90051D0F4 /* Welcome.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4066DB9614ECF9D90051D0F4 /* en */,
+			);
+			name = Welcome.rtf;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4066DB5E14EAA5C00051D0F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		4066DB5F14EAA5C00051D0F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4066DB5C14EAA5C00051D0F4 /* Build configuration list for PBXProject "CrossPack-AVR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4066DB5E14EAA5C00051D0F4 /* Debug */,
+				4066DB5F14EAA5C00051D0F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4066DB5914EAA5C00051D0F4 /* Project object */;
+}

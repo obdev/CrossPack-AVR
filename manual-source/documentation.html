@@ -1,0 +1,125 @@
+<?include "header.php"?>
+<h1>Documentation</h1>
+The various packages contained in <?echo $pkgname?> come with different forms of documentation. Some have HTML documentation, some have Unix man pages and some have GNU Info files.
+<p>
+This section is a starting point for all documentation resources. Unfortunately, we can't link Unix man pages and GNU Info files into this HTML page. You must type the appropriate commands yourself.
+
+<?
+function htmlLink($module)
+{
+	global $prefix;
+	echo "file://$prefix/doc/$module/index.html";
+}
+?>
+<h2>Documentation Available in HTML Format</h2>
+<a href="<?htmlLink("avr-libc")?>">AVR Libc - a C library for GCC on AVR microcontrollers</a><br>
+<a href="<?htmlLink("avrdude")?>">AVRDUDE - AVR Downloader/Uploader</a><br>
+
+<h2>Documentation Available as Unix Man Pages</h2>
+<?echo $pkgname?> includes the command <tt>avr-man</tt> to ensure that AVR specific manual pages are printed. Example:
+<div class="shell box header">Shell Session:</div><div class="shell box">bash$ avr-man strcpy
+&lt;string.h&gt;: Strings(3)             avr-libc             &lt;string.h&gt;: Strings(3)
+
+NAME
+       &lt;string.h&gt;: Strings -
+
+Detailed Description
+        #include &lt;string.h&gt;
+
+       The string functions perform string operations on NULL terminated
+       strings.
+       ...
+</div>
+<?
+	global $prefix;
+	$sfp = opendir("$prefix/man");
+	while($dir = readdir($sfp)){
+		if(ereg('^man([0-9a-zA-Z.]+)', $dir, $regs)){
+			$section = $regs[1];
+			echo "<h3>Documents in Section $section</h3>\n";
+			$fp = opendir("$prefix/man/$dir");
+			while($name = readdir($fp)){
+				if(!ereg(".$section\$", $name))
+					continue;
+				if(filesize("$prefix/man/$dir/$name") < 300)
+					continue;
+				$f = fopen("$prefix/man/$dir/$name", "r");
+				$description = "";
+				while($line = fgets($f, 1000)){
+					if(ereg('^[.]SH NAME', $line)){
+						$description = trim(fgets($f, 1000));
+						break;
+					}
+				}
+				fclose($f);
+				$name = ereg_replace(".$section\$", "", $name);
+				$description = ereg_replace('[ \t]*\\\\[a-zA-Z0-9]+[ \t]*', ' ', $description);
+				$description = ereg_replace('[.]PP', '', $description);
+				if(ereg('^(.*) \\\\- ?(.*)$', $description, $regs)){
+					$part1 = trim($regs[1]);
+					$part2 = trim($regs[2]);
+					if($part1 == ""){
+						$description = $part2;
+					}else if($part1 == $name || "avr-$part1" == $name){
+						$description = $part2;
+					}else if($part2 == ""){
+						$description = $part1;
+					}else{
+						$description = "$part1 - $part2";
+					}
+				}
+				if(strlen($description) > 70)
+					$description = "";
+				if($description == ""){
+					echo "$name<br>\n";
+				}else{
+					echo "$name: " . htmlspecialchars($description) . "<br>\n";
+				}
+			}
+			closedir($fp);
+		}
+	}
+	closedir($sfp);
+?>
+
+<h2>Documentation Available as GNU Info Pages</h2>
+<?echo $pkgname?> includes the command <tt>avr-info</tt> to ensure that AVR specific info pages are printed. Example:
+<div class="shell box header">Shell Session:</div><div class="shell box">bash$ avr-info binutils
+File: binutils.info,  Node: Top,  Next: ar,  Up: (dir)
+
+Introduction
+************
+
+This brief manual contains documentation for the GNU binary utilities
+(GNU Binutils) version 2.17.90:
+...
+</div>
+<h3>List of Info Documents</h3>
+<?
+	global $prefix;
+	$fp = opendir("$prefix/share/info");
+	unset($docs);
+	while($file = readdir($fp)){
+		if(ereg('^(.*)[.]info.*$', $file, $regs)){
+			$docs[$regs[1]] = true;
+		}
+	}
+	closedir($fp);
+	$names = array_keys($docs);
+	sort($names, SORT_STRING);
+	for($i = 0; $i < count($names); $i++){
+		$name = $names[$i];
+		echo "$name<br>\n";
+	}
+
+?>
+
+<h2>AVR Libc Examples</h2>
+<?
+	$fp = popen("echo \"$prefix/share/doc/avr-libc-\"*/examples/", "r");
+	$path = trim(fgets($fp, 10000));
+	pclose($fp);
+?>
+AVR Libc comes with a set of example projects. These can be viewed <a href="<?echo "file://$path"?>">here</a>.
+
+<?include "footer.php"?>

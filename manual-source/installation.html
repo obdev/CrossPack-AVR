@@ -1,0 +1,30 @@
+<?include "header.php"?>
+<h1>Installing <?echo $pkgname?></h1>
+<?echo $pkgname?> comes as a Mac OS X installer package. Simply double-click <?echo $pkgUnixName?>.pkg to install. Please restart Terminal after installation to make sure that it inherits the new <tt>PATH</tt> environment variable.
+<p>
+<?echo $pkgname?> does not include a text editor for editing source files. If you have Xcode already installed (e.g. because you also need to develop software for the Mac), simply use Xcode to edit your sources. If you don't have Xcode, recommend <a href="http://www.barebones.com/products/textwrangler/" target="_blank">BareBone's TextWrangler</a> instead. It's free. You may also use TextEdit (which ships with Mac OS X) for source code editing, but it lacks things like auto-indentation.
+
+<h1>Upgrading</h1>
+<?echo $pkgname?> installs into <tt>/usr/local/<?echo $pkgUnixName?>-&lt;version&gt;</tt> and <tt>/usr/local/<?echo $pkgUnixName?></tt> is always a symbolic link to the version which has been installed last. Several versions of <?echo $pkgname?> can therefore coexist and you can switch between them by changing the symbolic link. If you want only one version, remove the old installation before installing the new package, or delete it any time later from <tt>/usr/local/</tt>:
+<div class="shell box header">Shell Session:</div><div class="shell box">bash$ cd /usr/local/
+bash$ ls -ld <?echo $pkgUnixName?>*
+lrwxr-xr-x   1 root  wheel   19 Dec  1 18:04 <?echo $pkgUnixName?> -&gt; <?echo $pkgUnixName?>-20071201
+drwxr-xr-x  15 root  wheel  568 Nov 26 22:12 <?echo $pkgUnixName?>-20071126
+drwxr-xr-x  18 root  wheel  612 Dec  1 18:04 <?echo $pkgUnixName?>-20071201
+bash$ sudo rm -rf <?echo $pkgUnixName?>-20071126
+Password:
+</div>
+
+
+<h1>Removing <?echo $pkgname?></h1>
+To remove <?echo $pkgname?> completely, run the following command in a Terminal window:
+<div class="shell box header">Shell Session:</div><div class="shell box">bash$ sudo /usr/local/<?echo $pkgUnixName?>/uninstall
+Password:
+Are you sure you want to uninstall <?echo $pkgname?> <?echo $version?>?
+[y/N]
+yes
+Starting uninstall.
+<?echo $pkgname?> is now removed.
+</div>
+
+<?include "footer.php"?>

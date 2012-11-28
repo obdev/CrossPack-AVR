@@ -1,0 +1,81 @@
+<?include "header.php"?>
+<h1>Release Notes</h1>
+The following list is in reverse historic order, new releases are inserted at the top:
+
+<h2>AVR MacPack 20120217</h2>
+<ul>
+	<li>Based on gcc version 4.5.1 and patches obtained from FreeBSD's ports section.</li>
+	<li>New versions of all packages.</li>
+	<li>Dropped support for Mac OS X 10.5 and older.</li>
+	<li>Dropped support for avr-gcc version 3.</li>
+</ul>
+
+<h2>AVR MacPack 20100115</h2>
+<ul>
+	<li>Based on WinAVR 20100110.</li>
+	<li>Added binutils bfd library for AVR to distribution.</li>
+	<li>New versions: avr-gcc 4.3.3, avr-libc 1.6.7, avrdude 5.8, simulavr 0.9</li>
+</ul>
+
+<h2>CrossPack-AVR 20090415</h2>
+<ul>
+	<li>Renamed project to CrossPack due to trademark issues.</li>
+</ul>
+
+<h2>AVR MacPack 20090319</h2>
+<ul>
+	<li>Based on WinAVR 20090313.</li>
+	<li>New patches from WinAVR fix linker bug which affected 8k devices in avr25 class such as ATTiny85.</li>
+	<li>Support for new devices: AT90PWM81, AT90SCR100, ATA6289, ATmega16M1, ATmega16U4, ATmega64C1, ATmega64M1, ATmega128RFA1, ATtiny87, ATxmega32A4, ATxmega32D4, ATxmega16A4, ATxmega16D4.</li>
+	<li>New versions: avr-libc 1.6.6, avrdude 5.6, avarice 2.9, simulavr 0.1.2.6.</li>
+</ul>
+
+<h2>AVR MacPack 20081213</h2>
+<ul>
+	<li>Removed all "<tt>.svn</tt>" directories from release.</li>
+	<li>New versions and patches from WinAVR 20081205: binutils 2.19, gcc 4.3.2, avr-libc 1.6.4, gdb 6.8, avarice 2.8.</li>
+	<li>These versions and patches bring support for new devices: ATxmega64A3, ATxmega128A3, ATxmega256A3, ATxmega256A3B and ATmega32U6.
+</li>
+</ul>
+
+<h2>AVR MacPack 20080721</h2>
+<ul>
+	<li>Avrdude linked libusb from /usr/local/lib instead of /usr/local/AVRMacPack/lib in version 20080716. This problem was caused by a changed precedence of library paths in Mac OS X 10.5. Only 20080716 is affected since this was the first release built on 10.5.</li>
+</ul>
+
+<h2>AVR MacPack 20080716</h2>
+<ul>
+	<li>Based on patches from WinAVR 20080610.</li>
+	<li>Added "binary constants" patch for gcc 3.</li>
+</ul>
+
+<h2>AVR MacPack 20080514</h2>
+<ul>
+	<li>New versions: gcc 4.3, avr-libc 1.6.2, simulavr 1.2.5.</li>
+	<li>Based on patches from WinAVR 20080512.</li>
+</ul>
+
+<h2>AVR MacPack 20080318</h2>
+<ul>
+	<li>Upgraded to avr-libc 1.6.1 patch level 20080228. Gcc 4.2.2 requires this version for some of the newer devices.</li>
+	<li>Added links to fuse calculators and other related information in manual.</li>
+	<li>Fixed a problem with changes in /etc/csh.login which caused an error message for users with tcsh as login shell.</li>
+</ul>
+
+
+<h2>AVR MacPack 20080121</h2>
+<ul>
+	<li>Fixed a problem in the template project where Xcode could not find avr-gcc and related tools (problem with PATH environment variable).</li>
+	<li>Fixed listing of supported devices in manual.</li>
+	<li>Allow user specific template projects in ~/.AVRMacPack/templates/TemplateProject.</li>
+</ul>
+
+
+<h2>AVR MacPack 20071201</h2>
+Cleaner separation into avr-gcc version 3 and 4. We now switch not only gcc, but also avr-libc so that it has been compiled with the same version of gcc.
+
+
+<h2>AVR MacPack 20071126</h2>
+This is the initial release.
+
+<?include "footer.php"?>

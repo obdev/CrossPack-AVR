@@ -1,0 +1,20 @@
+#!/bin/sh
+# Parameters passed:
+# $1: full path to the installation package (xxx.pkg)
+# $2: full path to destination (/)
+# $3: mountpoint of destination volume (/)
+# $4: root directory for current system folder (/)
+
+realPrefix="%prefix%"
+genericPrefix=$(echo "$realPrefix" | sed -e 's/-[0-9.]*$//g')
+pkgUnixName=$(basename "$genericPrefix")
+
+rm -f "$genericPrefix"
+ln -s `basename "$realPrefix"` "$genericPrefix"
+ln -s "$genericPrefix/manual/index.html" "/Applications/$pkgUnixName-Manual.html"
+
+echo "$genericPrefix/bin" >"/etc/paths.d/50-at.obdev.$pkgUnixName"
+
+(sleep 3; open "$genericPrefix/manual/index.html") &	# Wait until the user realized that install is ready
+
+exit 0
