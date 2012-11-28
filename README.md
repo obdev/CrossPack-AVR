@@ -13,8 +13,33 @@ PREREQUISITES
 =============
 
 * Xcode 4.4. It probably also works with newer versions of Xcode.
-* autoconf 2.63 or newer. Configure it with
+* autoconf 2.63 or newer. Configure autoconf it with
 
+        xcodepath="$(xcode-select -print-path)"
+        export PATH="$PATH:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin"
         export M4="xcrun m4"
-        ./configure --prefix=/usr/local
+        ./configure --prefix=/usr/local/autoconf
+
+You may, of course, choose an other prefix if you plan to keep autoconf
+installed.
+
+
+BUILDING CROSSPACK-AVR
+======================
+
+After installing Xcode and autoconf, simply run
+
+    export PATH="$PATH:/usr/local/autoconf/bin"
+    ./mkdist.sh
+
+in the root directory of the project. You may want to edit some options in
+the script before running it. The user who runs the script needs write
+permissions to the directory /usr/local.
+
+The resulting disk image can be found in /tmp.
+
+The build procedure preserves all downloaded packages. If you want to remove
+them in order to save disk space, run
+
+    ./mkclean.sh
 
