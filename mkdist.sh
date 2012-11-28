@@ -397,6 +397,8 @@ if [ ! -d packages ]; then
     mkdir packages
 fi
 
+echo "Starting download at $(date +"%Y-%m-%d %H:%M:%S")"
+
 atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-Toolchain-3.4.1.830/avr/"
 getPackage "$atmelBaseURL/avr-binutils-$version_binutils.tar.gz"
 getPackage "$atmelBaseURL/avr-gcc-$version_gcc.tar.gz"
@@ -423,8 +425,15 @@ if [ ! -d "$installdir" ]; then
     mkdir "$installdir"
 fi
 
+
 #########################################################################
-# math prerequisites:
+# Build sources
+#########################################################################
+
+echo "Starting build at $(date +"%Y-%m-%d %H:%M:%S")"
+
+#########################################################################
+# math prerequisites
 #########################################################################
 buildPackage gmp-"$version_gmp"   "$installdir/lib/libgmp.a"  --prefix="$installdir" --enable-shared=no
 buildPackage mpfr-"$version_mpfr" "$installdir/lib/libmpfr.a" --with-gmp="$installdir" --prefix="$installdir" --enable-shared=no
@@ -671,6 +680,8 @@ mv "manual" "$prefix/"
 # Mac OS X Package creation
 #########################################################################
 
+echo "Starting package creation at $(date +"%Y-%m-%d %H:%M:%S")"
+
 # remove files which should not make it into the package
 chmod -R a+rX "$prefix"
 find "$prefix" -type f -name '.DS_Store' -exec rm -f '{}' \;
@@ -730,6 +741,8 @@ rm -rf "$pkgroot"
 #########################################################################
 # Disk Image
 #########################################################################
+
+echo "Starting disk image creation at $(date +"%Y-%m-%d %H:%M:%S")"
 
 rwImage="/tmp/$pkgUnixName-$pkgVersion-rw-$$.dmg"   # temporary disk image
 dmg="/tmp/$pkgUnixName-$pkgVersion.dmg"
@@ -814,3 +827,5 @@ xcrun git tag "releases/$pkgVersion"
 echo "################################################################################"
 echo "Please push the new git tag"
 echo "################################################################################"
+
+echo "Finished at $(date +"%Y-%m-%d %H:%M:%S")"
