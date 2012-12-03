@@ -387,6 +387,14 @@ copyPackage() # <package-name> <destination>
 # main code
 ###############################################################################
 
+if [ -d "$prefix" -a ! -w "$prefix" -a -x "$prefix/uninstall" ]; then
+    echo "Please type your password so that we can run uninstall as root:"
+    if ! sudo "$prefix/uninstall"; then
+        echo "Aborting because uninstall failed"
+        exit 1
+    fi
+fi
+
 if ! "$debug"; then
     rm -rf math
     rm -rf compile
