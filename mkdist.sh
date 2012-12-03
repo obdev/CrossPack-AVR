@@ -519,7 +519,7 @@ copyPackage avr-libc-manpages-"$version_avrlibc" "$prefix/man"
 #########################################################################
 # avr-gcc full build
 #########################################################################
-buildPackage avar-gcc-"$version_gcc" "$prefix/bin/avr-gcc" --target=avr --enable-languages=c,c++ --enable-fixed-point --disable-libssp --disable-libada --with-dwarf2 --disable-shared --with-gmp="$installdir" --with-mpfr="$installdir" --with-mpc="$installdir"
+buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-g++" --target=avr --enable-languages=c,c++ --enable-fixed-point --disable-libssp --disable-libada --with-dwarf2 --disable-shared --with-gmp="$installdir" --with-mpfr="$installdir" --with-mpc="$installdir"
 
 #########################################################################
 # gdb and simulavr
