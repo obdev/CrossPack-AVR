@@ -9,7 +9,7 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20121128
+pkgVersion=20121203
 
 version_make=3.82
 version_gdb=7.5
