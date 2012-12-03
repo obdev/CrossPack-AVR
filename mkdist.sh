@@ -563,8 +563,31 @@ if [ -n "$libErrors" ]; then
     echo "################################################################################"
     echo "Aborting build due to above errors"
     echo "################################################################################"
-    exit
+    exit 1
 fi
+
+#########################################################################
+# basic tests
+#########################################################################
+tmpfile="/tmp/test-$$.elf"
+rm -rf "$tmpfile"
+echo "int __attribute__((noreturn)) main(void){for(;;);}" | "$prefix/bin/avr-gcc" -x c -o "$tmpfile" -
+if [ ! -f "$tmpfile" ]; then
+    echo "################################################################################"
+    echo "Aborting build because avr-gcc cannot compile C code"
+    echo "################################################################################"
+    exit 1
+fi
+
+rm -rf "$tmpfile"
+echo "int __attribute__((noreturn)) main(void){for(;;);}" | "$prefix/bin/avr-gcc" -x c++ -o "$tmpfile" -
+if [ ! -f "$tmpfile" ]; then
+    echo "################################################################################"
+    echo "Aborting build because avr-gcc cannot compile C++ code"
+    echo "################################################################################"
+    exit 1
+fi
+
 
 #########################################################################
 # Create shell scripts and supporting files
