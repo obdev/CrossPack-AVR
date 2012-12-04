@@ -393,6 +393,29 @@ copyPackage() # <package-name> <destination>
     chmod -R a+rX "$destination"
 }
 
+# The following function fixes the library path of a load command in a mach-o
+# executable. Yes, this is a hack!
+# We need to patch the path in order to preserve 10.6 compatibility when compiling
+# with 10.7 SDK: When we link to libreadline, we get libedit as an indirect
+# dependency of the binary (in our case: avrdude). Since libreadline links to an
+# explicit version of libedit and this version differs between 10.6 and 10.7, we
+# need to remove the version number.
+fixLoadCommandInBinary() #<binary-path> <searchLibraryPath> <replacementLibraryPath>
+{
+    executable="$1"
+    searchLib="$2"
+    replaceLib="$3"
+    echo "Fixing library $searchLib in $executable"
+    # we need /bin/echo because sh's built-in echo does not support -n
+    search=$(/bin/echo -n "$searchLib" | xxd -p | tr -d '\n')
+    replace=$(/bin/echo -n "$replaceLib" | xxd -p | tr -d '\n')
+    # now pad $replace to same length as search:
+    delta=$((${#search} - ${#replace}))
+    zero="00000000000000000000000000000000000000000000000000000000000000000000000"
+    replace="$replace${zero:0:$delta}"
+    xxd -p "$executable" | tr -d '\n' | sed -e "s/$search/$replace/" | xxd -p -r >"$executable.fixed"
+    mv -f "$executable.fixed" "$executable"
+}
 
 ###############################################################################
 # main code
@@ -551,7 +574,8 @@ buildPackage simulavr-"$version_simulavr" "$prefix/bin/simulavr" --with-bfd="$pr
 (
     buildCFLAGS="$buildCFLAGS $("$prefix/bin/libusb-config" --cflags)"
     export LDFLAGS="$("$prefix/bin/libusb-config" --libs)"
-    buildPackage avrdude-"$version_avrdude" "$prefix/bin/avrdude" 
+    buildPackage avrdude-"$version_avrdude" "$prefix/bin/avrdude"
+    fixLoadCommandInBinary "$prefix/bin/avrdude" /usr/lib/libedit.3.dylib /usr/lib/libedit.dylib
     copyPackage avrdude-doc-"$version_avrdude" "$prefix/doc/avrdude"
     if [ ! -f "$prefix/doc/avrdude/index.html" ]; then
         ln -s avrdude.html "$prefix/doc/avrdude/index.html"
