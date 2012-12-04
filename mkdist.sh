@@ -286,6 +286,16 @@ mergeAVRHeaders()
     mv -f include/avr/io.h.new include/avr/io.h
 }
 
+postConfigurePatches()
+{
+    # Patch config.h so that we do not use strndup(), even if it is available.
+    # Strndup() is not available on 10.6 and we must not use it in order to
+    # preserve 10.6 compatibility.
+    if [ -f config.h ]; then
+        sed -ibak -e 's/#define.*HAVE_STRNDUP[^0-9A-Za-z].*$/#undef HAVE_STRNDUP/g' config.h
+    fi
+}
+
 buildPackage() # <package-name> <known-product> <additional-config-args...>
 {
     name="$1"
@@ -336,6 +346,7 @@ buildPackage() # <package-name> <known-product> <additional-config-args...>
         echo "cwd=`pwd`"
         echo $rootdir/configure --prefix="$prefix" $configureArgs "$@"
         $rootdir/configure --prefix="$prefix" $configureArgs "$@" || exit 1
+        postConfigurePatches
         if [ -d $rootdir/bfd ]; then # if we build GNU binutils, ensure we update headers after patching
             make    # expect this make to fail, but at least we have configured everything
             (
