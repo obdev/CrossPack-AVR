@@ -607,7 +607,7 @@ fi
 #########################################################################
 tmpfile="/tmp/test-$$.elf"
 rm -rf "$tmpfile"
-echo "int __attribute__((noreturn)) main(void){for(;;);}" | "$prefix/bin/avr-gcc" -x c -o "$tmpfile" -
+echo "int main(void) { return 0; }" | "$prefix/bin/avr-gcc" -x c -o "$tmpfile" -
 if [ ! -f "$tmpfile" ]; then
     echo "################################################################################"
     echo "Aborting build because avr-gcc cannot compile C code"
@@ -616,7 +616,7 @@ if [ ! -f "$tmpfile" ]; then
 fi
 
 rm -rf "$tmpfile"
-echo "int __attribute__((noreturn)) main(void){for(;;);}" | "$prefix/bin/avr-gcc" -x c++ -o "$tmpfile" -
+echo "int main(void) { return 0; }" | "$prefix/bin/avr-gcc" -x c++ -o "$tmpfile" -
 if [ ! -f "$tmpfile" ]; then
     echo "################################################################################"
     echo "Aborting build because avr-gcc cannot compile C++ code"
