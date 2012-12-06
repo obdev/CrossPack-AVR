@@ -772,7 +772,9 @@ rm -rf "$pkgroot"
 mkdir "$pkgroot"
 mkdir "$pkgroot/usr"
 mkdir "$pkgroot/usr/local"
-cp -a "$prefix" "$pkgroot/usr/local/"
+
+# Do not use cp -a below because it does not preserve hard links.
+tar -C "$(dirname "$prefix")" -c -f - "$(basename "$prefix")" | tar -C "$pkgroot/usr/local" -x -f -
 
 osxpkgtmp="/tmp/osxpkg-$$"
 rm -rf "$osxpkgtmp"
