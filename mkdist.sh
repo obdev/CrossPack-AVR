@@ -667,10 +667,10 @@ chmod a+x "$prefix/bin/avr-help"
 
 # avr-gcc-select
 cat > "$prefix/bin/avr-gcc-select" <<-EOF
-    #!/bin/sh
-    echo "avr-gcc-select is not supported any more."
-    echo "This version of $pkgPrettyName comes with gcc 4 only."
-    exit 1
+	#!/bin/sh
+	echo "avr-gcc-select is not supported any more."
+	echo "This version of $pkgPrettyName comes with gcc 4 only."
+	exit 0
 EOF
 chmod a+x "$prefix/bin/avr-gcc-select"
 
