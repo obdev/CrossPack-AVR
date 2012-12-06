@@ -5,4 +5,4 @@ if [ ! -x ./mkclean.sh ]; then
     exit 1
 fi
 
-rm -rf compile math patches manual packages
+rm -rf compile math temporary-install patches manual packages

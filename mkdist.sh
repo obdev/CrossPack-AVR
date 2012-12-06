@@ -16,6 +16,7 @@ version_gdb=7.5
 version_gmp=4.3.2
 version_mpfr=3.1.0
 version_mpc=0.9
+version_autoconf=2.69
 version_libusb=1.0.8
 version_headers=6.1.0.1157
 version_avarice=2.13
@@ -43,7 +44,7 @@ sysroot="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"
 # Ensure that no references to older versions of CrossPack AVR are in PATH:
 PATH="$(echo "$PATH" | sed -e "s|:/usr/local/$pkgUnixName/bin||g")"
 # Add new install destination and Xcode tools to PATH:
-PATH="$prefix/bin:$PATH:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+PATH="$prefix/bin:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin:$PATH"
 export PATH
 
 commonCFLAGS="-isysroot $sysroot"
@@ -55,11 +56,6 @@ buildCFLAGS="$commonCFLAGS -arch i386"  # used for tool chain
 ###############################################################################
 # Check prerequisites first
 ###############################################################################
-
-if ! autoconf -V >/dev/null 2>&1; then
-    echo "autoconf version 2.63 or higher is required. Please download and install it."
-    exit
-fi
 
 
 ###############################################################################
@@ -431,7 +427,7 @@ if [ -d "$prefix" -a ! -w "$prefix" -a -x "$prefix/uninstall" ]; then
 fi
 
 if ! "$debug"; then
-    rm -rf math
+    rm -rf "$installdir"
     rm -rf compile
     updatePatches
     rm -rf "$prefix"
@@ -454,6 +450,7 @@ getPackage http://ftp.sunet.se/pub/gnu/make/make-"$version_make".tar.bz2
 getPackage ftp://ftp.gmplib.org/pub/gmp-"$version_gmp"/gmp-"$version_gmp".tar.bz2
 getPackage http://ftp.sunet.se/pub/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
 getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
+getPackage http://ftp.gnu.org/gnu/autoconf/autoconf-"$version_autoconf".tar.gz
 getPackage http://ftp.sunet.se/pub/gnu/gdb/gdb-"$version_gdb".tar.bz2
 getPackage http://downloads.sourceforge.net/avarice/avarice-"$version_avarice".tar.bz2
 getPackage http://download.savannah.gnu.org/releases/avr-libc/avr-libc-manpages-"$version_avrlibc".tar.bz2
@@ -464,7 +461,7 @@ getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-"$version_a
 getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-doc-"$version_avrdude".tar.gz
 getPackage http://download.savannah.gnu.org/releases/simulavr/simulavr-"$version_simulavr".tar.gz
 
-installdir="$(pwd)/math"
+installdir="$(pwd)/temporary-install"
 if [ ! -d "$installdir" ]; then
     mkdir "$installdir"
 fi
@@ -477,8 +474,13 @@ fi
 echo "Starting build at $(date +"%Y-%m-%d %H:%M:%S")"
 
 #########################################################################
-# math prerequisites
+# math and other prerequisites
 #########################################################################
+export M4="xcrun m4"
+buildPackage autoconf-"$version_autoconf" "$installdir/autoconf/bin/autoconf" --prefix="$installdir/autoconf"
+unset M4
+export PATH="$installdir/autoconf/bin:$PATH"
+
 buildPackage gmp-"$version_gmp"   "$installdir/lib/libgmp.a"  --prefix="$installdir" --enable-shared=no
 buildPackage mpfr-"$version_mpfr" "$installdir/lib/libmpfr.a" --with-gmp="$installdir" --prefix="$installdir" --enable-shared=no
 buildPackage mpc-"$version_mpc"   "$installdir/lib/libmpc.a"  --with-gmp="$installdir" --with-mpfr="$installdir" --prefix="$installdir" --enable-shared=no
