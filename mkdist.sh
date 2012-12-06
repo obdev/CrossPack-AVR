@@ -57,6 +57,14 @@ buildCFLAGS="$commonCFLAGS -arch i386"  # used for tool chain
 # Check prerequisites first
 ###############################################################################
 
+releaseNotesVersion=$(sed -n -e '/20[01234][0-9][01][0-9][0-3][0-9]<[/]h/ s/^.*\([0-9]\{8\}\).*$/\1/g p' manual-source/releasenotes.html | head -1)
+if ! $debug; then
+    if [ "$releaseNotesVersion" != "$pkgVersion" ]; then
+        echo "*** Release notes not up-to-date!"
+        echo "Latest release notes are for version $releaseNotesVersion, package version is $pkgVersion"
+        exit 1
+    fi
+fi
 
 ###############################################################################
 # Obtaining the packages from the net
