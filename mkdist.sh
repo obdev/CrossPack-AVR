@@ -413,8 +413,9 @@ fixLoadCommandInBinary() #<binary-path> <searchLibraryPath> <replacementLibraryP
     delta=$((${#search} - ${#replace}))
     zero="00000000000000000000000000000000000000000000000000000000000000000000000"
     replace="$replace${zero:0:$delta}"
-    xxd -p "$executable" | tr -d '\n' | sed -e "s/$search/$replace/" | xxd -p -r >"$executable.fixed"
-    mv -f "$executable.fixed" "$executable"
+    cp "$executable" "$executable.orig"
+    xxd -p "$executable.orig" | tr -d '\n' | sed -e "s/$search/$replace/" | xxd -p -r >"$executable"
+    rm -f "$executable.orig"
 }
 
 ###############################################################################
