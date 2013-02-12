@@ -9,7 +9,7 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20121207
+pkgVersion=20130212
 
 version_make=3.82
 version_gdb=7.5
@@ -241,7 +241,14 @@ unpackPackage() # <package-name>
 mergeAVRHeaders()
 {
     for i in "../avr-headers-$version_headers"/io?*.h; do
-        cp -f "$i" include/avr/
+        # iotn4313.h is broken in atmel's header package AND in avr-libc-1.8.0. Our
+        # build mechanism allows to apply a patch to avr-libc-1.8.0 (since it has the
+        # standard configure/make procedure), but not to Atmel's headers. We therefore
+        # patch avr-libc and give it precedence over Atmel's headers for iotn4313.h.
+        # In all other cases Atmel's headers have precedence.
+        if [ "$(basename "$i")" != iotn4313.h ]; then
+            cp -f "$i" include/avr/
+        fi
     done
     # We must merge the conditional includes of both versions of io.h since we
     # want to build a superset:

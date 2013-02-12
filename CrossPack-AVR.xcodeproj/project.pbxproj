@@ -35,6 +35,7 @@
 		406D947716665618004D70FD /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
 		406D947916665641004D70FD /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = postinstall; sourceTree = "<group>"; };
 		406D947A16665653004D70FD /* background.jp2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = background.jp2; sourceTree = "<group>"; };
+		40CFCFBD16C9A6B200C292D0 /* 010-iotn4312-header.patch */ = {isa = PBXFileReference; lastKnownFileType = text; path = "010-iotn4312-header.patch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -55,6 +56,7 @@
 		4066DB6514EBD0BC0051D0F4 /* patches-local */ = {
 			isa = PBXGroup;
 			children = (
+				40CFCFBC16C9A6B200C292D0 /* avr-libc-1.8.0 */,
 				4066DB6814EBEE560051D0F4 /* gcc-3.4.6 */,
 				4066DB6614EBD0BC0051D0F4 /* libusb-0.1.12 */,
 			);
@@ -173,6 +175,14 @@
 				406D947916665641004D70FD /* postinstall */,
 			);
 			path = scripts;
+			sourceTree = "<group>";
+		};
+		40CFCFBC16C9A6B200C292D0 /* avr-libc-1.8.0 */ = {
+			isa = PBXGroup;
+			children = (
+				40CFCFBD16C9A6B200C292D0 /* 010-iotn4312-header.patch */,
+			);
+			path = "avr-libc-1.8.0";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
