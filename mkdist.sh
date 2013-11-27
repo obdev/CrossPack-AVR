@@ -308,6 +308,15 @@ buildPackage() # <package-name> <known-product> <additional-config-args...>
                 ./bootstrap
             fi
         fi
+        if [ "$base" = avr-gcc ]; then
+            # manually clean dependent files, these are not always removed by make distclean
+            grep -RiIn --exclude-dir zlib 'generated automatically by' . | tr ':' ' ' | while read file line rest; do
+                if [ "$line" -lt 4 ]; then
+                    echo "removing dependent file $file"
+                    rm "$file"
+                fi
+            done
+        fi
         if [ "$base" = avr-gcc -o "$base" = simulavr ]; then    # build gcc in separate dir, it will fail otherwise
             mkdir build-objects
             rm -rf build-objects/*
