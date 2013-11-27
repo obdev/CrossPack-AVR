@@ -50,7 +50,13 @@ export PATH
 commonCFLAGS="-isysroot $sysroot"
 # Build libraries for i386 and x86_64, but executables i386 only so that the
 # size of the distribution is not unecessary large.
-buildCFLAGS="$commonCFLAGS -arch i386"  # used for tool chain
+buildCFLAGS="$commonCFLAGS -arch i386 -fno-stack-protector"  # used for tool chain
+# Why -fno-stack-protector? Gcc 4.7.2 compiled with Xcode 5 aborts with a stack
+# protection failure when building libgcc for avrtiny. The problem occurs with -O2
+# only, not with -O0. It's hard to debug with the heavy inlining of -O2. Since
+# there is no obvious overflow, this is maybe a bug in clang's stack protector.
+# In any case, we are not responsible for debugging either of the two compilers,
+# so we simply disable the check.
 
 
 ###############################################################################
