@@ -9,24 +9,30 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20130212
+pkgVersion=20131128
 
-version_make=3.82
-version_gdb=7.5
+version_make=4.0
+version_automake=1.11.1 # required by binutils
+version_gdb=7.6.1
 version_gmp=4.3.2
-version_mpfr=3.1.0
-version_mpc=0.9
-version_autoconf=2.69
-version_libusb=1.0.8
-version_headers=6.1.0.1157
+version_mpfr=3.1.2
+version_mpc=1.0
+version_ppl=0.12.1
+version_cloog=0.16.2
+version_autoconf=2.64   # required by binutils
+version_libusb=1.0.9
 version_avarice=2.13
-version_avrdude=5.11.1
+version_avrdude=6.0.1
 version_simulavr=0.1.2.7
+# simulavr-1.0.0 does not compile
 # We want to add simavr to the distribution, but it does not compile easily...
 
-version_binutils=2.22
-version_gcc=4.6.2
+# The following packages are fetched from Atmel:
+atmelToolchainVersion=3.4.3
+version_binutils=2.23.1
+version_gcc=4.7.2
 #version_gcc3=3.4.6
+version_headers=6.1.3.1475
 version_avrlibc=1.8.0
 
 debug=false
@@ -40,11 +46,10 @@ configureArgs="--disable-dependency-tracking --disable-nls --disable-werror"
 umask 0022
 
 xcodepath="$(xcode-select -print-path)"
-sysroot="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"
-# Ensure that no references to older versions of CrossPack AVR are in PATH:
-PATH="$(echo "$PATH" | sed -e "s|:/usr/local/$pkgUnixName/bin||g")"
-# Add new install destination and Xcode tools to PATH:
-PATH="$prefix/bin:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin:$PATH"
+sysroot="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"
+
+# Do not include original PATH in our PATH to ensure that third party stuff is not found
+PATH="$prefix/bin:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH
 
 commonCFLAGS="-isysroot $sysroot"
@@ -424,17 +429,22 @@ fi
 
 echo "Starting download at $(date +"%Y-%m-%d %H:%M:%S")"
 
-atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-Toolchain-3.4.1.830/avr/"
+atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-Toolchain-$atmelToolchainVersion/avr/"
 getPackage "$atmelBaseURL/avr-binutils-$version_binutils.tar.gz"
 getPackage "$atmelBaseURL/avr-gcc-$version_gcc.tar.gz"
 getPackage "$atmelBaseURL/avr-headers-$version_headers.zip"
 getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz"
+# We do not fetch patches available in this directory because they are already applied
 #getPackage http://ftp.sunet.se/pub/gnu/gcc/releases/gcc-"$version_gcc3"/gcc-"$version_gcc3".tar.bz2
 
 getPackage http://ftp.sunet.se/pub/gnu/make/make-"$version_make".tar.bz2
-getPackage ftp://ftp.gmplib.org/pub/gmp-"$version_gmp"/gmp-"$version_gmp".tar.bz2
+getPackage http://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
+getPackage http://ftp.gmplib.org/gmp/gmp-"$version_gmp".tar.bz2
 getPackage http://ftp.sunet.se/pub/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
 getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
+# We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
+#getPackage http://bugseng.com/products/ppl/download/ftp/releases/"$version_ppl"/ppl-"$version_ppl".tar.bz2
+#getPackage http://gcc.cybermirror.org/infrastructure/cloog-"$version_cloog".tar.gz
 getPackage http://ftp.gnu.org/gnu/autoconf/autoconf-"$version_autoconf".tar.gz
 getPackage http://ftp.sunet.se/pub/gnu/gdb/gdb-"$version_gdb".tar.bz2
 getPackage http://downloads.sourceforge.net/avarice/avarice-"$version_avarice".tar.bz2
@@ -466,9 +476,15 @@ buildPackage autoconf-"$version_autoconf" "$installdir/autoconf/bin/autoconf" --
 unset M4
 export PATH="$installdir/autoconf/bin:$PATH"
 
-buildPackage gmp-"$version_gmp"   "$installdir/lib/libgmp.a"  --prefix="$installdir" --enable-shared=no
+buildPackage automake-"$version_automake" "$installdir/automake/bin/automake" --prefix="$installdir/automake"
+export PATH="$installdir/automake/bin:$PATH"
+
+buildPackage gmp-"$version_gmp"   "$installdir/lib/libgmp.a"  --prefix="$installdir" --enable-cxx --enable-shared=no --disable-assembly
 buildPackage mpfr-"$version_mpfr" "$installdir/lib/libmpfr.a" --with-gmp="$installdir" --prefix="$installdir" --enable-shared=no
 buildPackage mpc-"$version_mpc"   "$installdir/lib/libmpc.a"  --with-gmp="$installdir" --with-mpfr="$installdir" --prefix="$installdir" --enable-shared=no
+#buildPackage ppl-"$version_ppl"   "$installdir/lib/libppl.a"  --with-gmp="$installdir" --prefix="$installdir" --enable-shared=no
+#buildPackage cloog-"$version_cloog"   "$installdir/lib/libcloog-isl.a"  --with-gmp-prefix="$installdir" --prefix="$installdir" --enable-shared=no
+
 rm -f "$installdir/lib/"*.dylib # ensure we have no shared libs
 
 #########################################################################
@@ -515,7 +531,10 @@ fi
 #########################################################################
 # gcc bootstrap
 #########################################################################
-buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-gcc" --target=avr --enable-languages=c --disable-libssp --disable-libada --with-dwarf2 --disable-shared --with-gmp="$installdir" --with-mpfr="$installdir" --with-mpc="$installdir"
+buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-gcc" --target=avr --enable-languages=c --disable-libssp --disable-libada --with-dwarf2 --disable-shared --with-avrlibc=yes --with-gmp="$installdir" --with-mpfr="$installdir" --with-mpc="$installdir"
+
+# --with-ppl="$installdir" --with-cloog="$installdir" --enable-cloog-backend=isl
+# We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
 
 # If we want to support avr-gcc version 3.x, we want to have it available as
 # separate binary avr-gcc3, not with avr-gcc-select. Unfortunately, we also need
@@ -541,7 +560,7 @@ copyPackage avr-libc-manpages-"$version_avrlibc" "$prefix/man"
 #########################################################################
 # avr-gcc full build
 #########################################################################
-buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-g++" --target=avr --enable-languages=c,c++ --enable-fixed-point --disable-libssp --disable-libada --with-dwarf2 --disable-shared --with-gmp="$installdir" --with-mpfr="$installdir" --with-mpc="$installdir"
+buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-g++" --target=avr --enable-languages=c,c++ --disable-libssp --disable-libada --with-dwarf2 --disable-shared --with-avrlibc=yes --with-gmp="$installdir" --with-mpfr="$installdir" --with-mpc="$installdir"
 
 #########################################################################
 # gdb and simulavr
@@ -550,7 +569,7 @@ buildPackage gdb-"$version_gdb" "$prefix/bin/avr-gdb" --target=avr --without-pyt
 (
     binutils="$(pwd)/compile/avr-binutils-$version_binutils"
     buildCFLAGS="$buildCFLAGS $("$prefix/bin/libusb-config" --cflags) -I$binutils/bfd -I$binutils/include -O"
-    export LDFLAGS="$("$prefix/bin/libusb-config" --libs) -L$binutils/bfd -lz -L$binutils/libiberty -liberty"
+    export LDFLAGS="$LDFLAGS $("$prefix/bin/libusb-config" --libs) -L$binutils/bfd -lz -L$binutils/libiberty -liberty"
     buildPackage avarice-"$version_avarice" "$prefix/bin/avarice"
 )
 checkreturn
@@ -565,7 +584,7 @@ checkreturn
 #########################################################################
 (
     buildCFLAGS="$buildCFLAGS $("$prefix/bin/libusb-config" --cflags)"
-    export LDFLAGS="$("$prefix/bin/libusb-config" --libs)"
+    export LDFLAGS="$LDFLAGS $("$prefix/bin/libusb-config" --libs)"
     buildPackage avrdude-"$version_avrdude" "$prefix/bin/avrdude"
     fixLoadCommandInBinary "$prefix/bin/avrdude" /usr/lib/libedit.3.dylib /usr/lib/libedit.dylib
     copyPackage avrdude-doc-"$version_avrdude" "$prefix/doc/avrdude"
