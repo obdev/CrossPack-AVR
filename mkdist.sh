@@ -76,45 +76,6 @@ fi
 # Obtaining the packages from the net
 ###############################################################################
 
-# update the 'patches' directory by downloading current patches from freebsd ports
-updatePatches()
-{
-    # Find out what is the difference between
-    # http://www.freebsd.org/cgi/cvsweb.cgi/ports
-    # and
-    # http://www.freebsd.org/cgi/cvsweb.cgi/~checkout~/ports
-    tmpdir="/tmp/avrcrosspack-tmp-$$"
-    rm -rf "$tmpdir"
-    mkdir "$tmpdir"
-    if [ ! -d patches ]; then
-        mkdir patches
-    fi
-    for i in avr-gdb; do
-        echo "=== Fetching patches for $i"
-        url="http://www.freebsd.org/cgi/cvsweb.cgi/ports/devel/$i/files/files.tar.gz?tarball=1"
-        curl --location --progress-bar "$url" | tar -C "$tmpdir" -x -z -f -
-        base=$(echo "$i" | sed -e 's/^avr-//')
-        version=""
-        for file in "$tmpdir/files"/*; do
-            if [ "$file" != "$tmpdir/files/*" ]; then
-                version=$(echo "$file" | sed -e "s/^.*$base\(-[0-9][^-]*\).*$/\1/")
-                if [ "$version" != "$file" ]; then
-                    break
-                else
-                    version=""
-                fi
-            fi
-        done
-        dir="patches/$base$version"
-        if [ ! -d "$dir" ]; then
-            mkdir "$dir"
-        fi
-        mv -f "$tmpdir/files/"* "$dir/"
-        rm -rf "$tmpdir/files"
-    done
-    rm -rf "$tmpdir"
-}
-
 # download a package and unpack it
 getPackage() # <package-name>
 {
@@ -450,7 +411,6 @@ fi
 if ! "$debug"; then
     rm -rf "$installdir"
     rm -rf compile
-    updatePatches
     rm -rf "$prefix"
 fi
 
