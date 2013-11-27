@@ -617,14 +617,20 @@ fi
 rm -f "$tmpfile"
 
 for i in "$prefix/bin/"*; do
-    if [ "$(head -c 2 "$i")" != "#!" ]; then
-        "$i" --help >/dev/null 2>&1
-        rval=$?
-        if [ "$rval" != 0 -a "$rval" != 1 ]; then   # Those executables which don't understand --help, exit with status 1
-            echo "*** Cannot execute $i, rval=$rval"
-            exit 1
+    case $(basename "$i") in
+    avr-gcc-ar|avr-gcc-nm|avr-gcc-ranlib)
+        ;;
+    *)
+        if [ "$(head -c 2 "$i")" != "#!" ]; then
+            "$i" --help >/dev/null 2>&1
+            rval=$?
+            if [ "$rval" != 0 -a "$rval" != 1 ]; then   # Those executables which don't understand --help, exit with status 1
+                echo "*** Cannot execute $i, rval=$rval"
+                exit 1
+            fi
         fi
-    fi
+        ;;
+    esac
 done
 
 #########################################################################
