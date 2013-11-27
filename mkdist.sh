@@ -554,7 +554,11 @@ buildPackage gdb-"$version_gdb" "$prefix/bin/avr-gdb" --target=avr --without-pyt
     buildPackage avarice-"$version_avarice" "$prefix/bin/avarice"
 )
 checkreturn
-buildPackage simulavr-"$version_simulavr" "$prefix/bin/simulavr" --with-bfd="$prefix/bfd" --with-libiberty="$prefix" --disable-static --enable-dependency-tracking
+(
+    export CFLAGS="-Wno-error -g -O2"
+    buildPackage simulavr-"$version_simulavr" "$prefix/bin/simulavr" --with-bfd="$prefix/bfd" --with-libiberty="$prefix" --disable-static --enable-dependency-tracking
+)
+checkreturn
 
 #########################################################################
 # avrdude
