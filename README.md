@@ -22,6 +22,10 @@ After installing Xcode, simply run
 
     ./mkdist.sh
 
+or
+
+    ./mkdist.sh debug
+
 in the root directory of the project. You may want to edit some options in
 the script before running it, e.g. the version of CrossPack-AVR or versions
 of packages downloaded and compiled. The user who runs the script needs write
