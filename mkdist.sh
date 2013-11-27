@@ -344,14 +344,9 @@ buildPackage() # <package-name> <known-product> <additional-config-args...>
         fi
         if ! make; then
             echo "################################################################################"
-            echo "Retrying build of $name -- first attempt failed"
+            echo "Building $name failed."
             echo "################################################################################"
-            if ! make; then
-                echo "################################################################################"
-                echo "Building $name failed, even after retry."
-                echo "################################################################################"
-                exit 1
-            fi
+            exit 1
         fi
         make install || exit 1
         case "$product" in
