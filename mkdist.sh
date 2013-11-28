@@ -158,7 +158,7 @@ applyPatches()  # <package-name>
 {
     name="$1"
     base=$(echo "$name" | sed -e 's/-[.0-9]\{1,\}$//g')
-    for patchdir in patches patches-local; do
+    for patchdir in patches-local; do
         for target in "$base" "$name"; do
             if [ -d "$patchdir/$target" ]; then
                 echo "=== applying patches from $patchdir/$target"
@@ -170,7 +170,7 @@ applyPatches()  # <package-name>
                             if patch --silent -f -p0 < "$patch"; then
                                 :
                             else
-                                echo "*** FreeBSD Patch $patch failed!"
+                                echo "Patch $patch failed!"
                                 echo "Press enter to continue anyway"
                                 read
                             fi
