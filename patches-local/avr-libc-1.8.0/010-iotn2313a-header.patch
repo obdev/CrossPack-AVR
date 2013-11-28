@@ -1,6 +1,6 @@
-diff -ruwN avr-libc-1.8.0.orig/include/avr/iotn2313.h avr-libc-1.8.0/include/avr/iotn2313.h
---- include/avr/iotn2313.h	2011-12-29 09:51:50.000000000 +0100
-+++ include/avr/iotn2313.h	2013-02-11 23:16:25.000000000 +0100
+diff -ruwN avr-libc-1.8.0.orig/include/avr/iotn2313a.h avr-libc-1.8.0/include/avr/iotn2313a.h
+--- include/avr/iotn2313a.h	2011-12-29 09:51:50.000000000 +0100
++++ include/avr/iotn2313a.h	2013-02-11 23:16:25.000000000 +0100
 @@ -303,7 +303,7 @@
  #define EEAR5 5
  #define EEAR6 6
