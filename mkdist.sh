@@ -52,7 +52,7 @@ sysroot="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"
 PATH="$prefix/bin:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH
 
-commonCFLAGS="-isysroot $sysroot"
+commonCFLAGS="-isysroot $sysroot -mmacosx-version-min=10.6"
 # Build libraries for i386 and x86_64, but executables i386 only so that the
 # size of the distribution is not unecessary large.
 buildCFLAGS="$commonCFLAGS -arch i386 -fno-stack-protector"  # used for tool chain
