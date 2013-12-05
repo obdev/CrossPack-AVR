@@ -9,7 +9,7 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20131128
+pkgVersion=20131205
 
 version_make=4.0
 version_automake=1.11.1 # required by binutils
