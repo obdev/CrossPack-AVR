@@ -29,10 +29,10 @@ version_simulavr=0.1.2.7
 
 # The following packages are fetched from Atmel:
 atmelToolchainVersion=3.4.3
-version_binutils=2.23.1
-version_gcc=4.7.2
+version_binutils=2.23.2
+version_gcc=4.8.1
 #version_gcc3=3.4.6
-version_headers=6.1.3.1475
+version_headers=6.2.0.142
 version_avrlibc=1.8.0
 
 debug=false
