@@ -176,9 +176,7 @@ applyPatches()  # <package-name>
                     for patch in "../../$patchdir/$target/"*; do
                         if [ "$patch" != "../$patchdir/$target/*" ]; then
                             echo "    -" "$(basename "$patch")"
-                            if patch --silent -f -p0 < "$patch"; then
-                                :
-                            else
+                            if ! patch --silent -f -p0 < "$patch"; then
                                 echo "Patch $patch failed!"
                                 echo "Press enter to continue anyway"
                                 read
@@ -217,65 +215,73 @@ unpackPackage() # <package-name>
         echo "*** Package $name does not contain expected directory"
         exit 1
     fi
+    dir=$(echo "compile/$name/"*)
+    if [ $(echo "$dir" | wc -w) = 1 ]; then     # package contains single dir
+        mv "$dir"/* "compile/$name"             # move everything up one level
+        rm -rf "$dir"
+    fi
 }
 
 mergeAVRHeaders()
 {
-    for i in "../avr-headers-$version_headers"/io?*.h; do
+    for i in "../avr8-headers-$version_headers"/io?*.h; do
         # iotn4313.h is broken in atmel's header package AND in avr-libc-1.8.0. Our
         # build mechanism allows to apply a patch to avr-libc-1.8.0 (since it has the
         # standard configure/make procedure), but not to Atmel's headers. We therefore
         # patch avr-libc and give it precedence over Atmel's headers for iotn4313.h.
         # In all other cases Atmel's headers have precedence.
-        if [ "$(basename "$i")" != iotn4313.h ]; then
+        # The same is true for the 2313a.
+        if [ "$(basename "$i")" != iotn4313.h -a "$(basename "$i")" != iotn2313a.h ]; then
             cp -f "$i" include/avr/
         fi
     done
-    # We must merge the conditional includes of both versions of io.h since we
-    # want to build a superset:
-    awk 'BEGIN {
-            line = 0;
-            insertAt = 0;
-            recordLines = 1;
-        }
-
-        {
-            if (file != FILENAME) {     # file changed
-                if (file != "") {
-                    recordLines = 0;    # not first file
-                }
-                file = FILENAME;
+    if [ -f "../avr8-headers-$version_headers/io.h" ]; then
+        # We must merge the conditional includes of both versions of io.h since we
+        # want to build a superset:
+        awk 'BEGIN {
+                line = 0;
+                insertAt = 0;
+                recordLines = 1;
             }
-            if (def != "" && match($0, "^#[ \t]*include")) {
-                includes[def] = $0;
-            } else if (match($0, "^#[a-zA-Z]+[ \t]+[(]?defined")) {
-                if (insertAt == 0) {
-                    insertAt = line;
-                }
-                def = $3;
-                gsub("[^a-zA-Z0-9_]", "", def);
-            } else {
-                def = "";
-                if (recordLines) {
-                    lines[line++] = $0;
-                }
-            }
-        }
 
-        END {
-            for (i = 0; i < line; i++) {
-                if (i == insertAt) {
-                    prefix = "#if";
-                    for (def in includes) {
-                        printf("%s defined (%s)\n%s\n", prefix, def, includes[def]);
-                        prefix = "#elif";
+            {
+                if (file != FILENAME) {     # file changed
+                    if (file != "") {
+                        recordLines = 0;    # not first file
+                    }
+                    file = FILENAME;
+                }
+                if (def != "" && match($0, "^#[ \t]*include")) {
+                    includes[def] = $0;
+                } else if (match($0, "^#[a-zA-Z]+[ \t]+[(]?defined")) {
+                    if (insertAt == 0) {
+                        insertAt = line;
+                    }
+                    def = $3;
+                    gsub("[^a-zA-Z0-9_]", "", def);
+                } else {
+                    def = "";
+                    if (recordLines) {
+                        lines[line++] = $0;
                     }
                 }
-                print lines[i];
             }
-        }
-    ' "../avr-headers-$version_headers/io.h" include/avr/io.h > include/avr/io.h.new
-    mv -f include/avr/io.h.new include/avr/io.h
+
+            END {
+                for (i = 0; i < line; i++) {
+                    if (i == insertAt) {
+                        prefix = "#if";
+                        for (def in includes) {
+                            printf("%s defined (%s)\n%s\n", prefix, def, includes[def]);
+                            prefix = "#elif";
+                        }
+                    }
+                    print lines[i];
+                }
+            }
+        ' "../avr8-headers-$version_headers/io.h" include/avr/io.h > include/avr/io.h.new
+        mv -f include/avr/io.h.new include/avr/io.h
+    fi
 }
 
 postConfigurePatches()
@@ -442,7 +448,7 @@ atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-GNU-Toolchai
 # always download packages from Atmel, they sometimes update patches without updating the package name
 getPackage "$atmelBaseURL/avr-binutils-$version_binutils.tar.gz" alwaysDownload
 getPackage "$atmelBaseURL/avr-gcc-$version_gcc.tar.gz" alwaysDownload
-getPackage "$atmelBaseURL/avr-headers-$version_headers.zip" alwaysDownload
+getPackage "$atmelBaseURL/avr8-headers-$version_headers.zip" alwaysDownload
 getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz" alwaysDownload
 # We do not fetch patches available in this directory because they are already applied
 
@@ -563,7 +569,7 @@ buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-gcc" --target=avr --enable-
 #########################################################################
 # avr-libc
 #########################################################################
-unpackPackage "avr-headers-$version_headers"
+unpackPackage "avr8-headers-$version_headers"
 buildPackage avr-libc-"$version_avrlibc" "$prefix/avr/lib/libc.a" --host=avr
 copyPackage avr-libc-user-manual-"$version_avrlibc" "$prefix/doc/avr-libc"
 copyPackage avr-libc-manpages-"$version_avrlibc" "$prefix/man"
