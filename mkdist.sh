@@ -9,7 +9,7 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20131205
+pkgVersion=20131216
 
 version_make=4.0
 version_automake=1.11.1 # required by binutils
@@ -82,12 +82,21 @@ fi
 ###############################################################################
 
 # download a package and unpack it
-getPackage() # <package-name>
+getPackage() # <package-name> <alwaysDownload>
 {
     url="$1"
     package=$(basename "$url")
+    doDownload=no
     if [ ! -f "packages/$package" ]; then
+        doDownload=yes      # not yet downloaded
+    elif ! $debug; then
+        if [ "$2" = alwaysDownload ]; then
+            doDownload=yes  # release build and download forced
+        fi
+    fi
+    if [ "$doDownload" = yes ]; then
         echo "=== Downloading package $package"
+        rm -f "packages/$package"
         curl --location --progress-bar -o "packages/$package" "$url"
     fi
 }
@@ -429,12 +438,14 @@ fi
 
 echo "Starting download at $(date +"%Y-%m-%d %H:%M:%S")"
 
-atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-Toolchain-$atmelToolchainVersion/avr/"
-getPackage "$atmelBaseURL/avr-binutils-$version_binutils.tar.gz"
-getPackage "$atmelBaseURL/avr-gcc-$version_gcc.tar.gz"
-getPackage "$atmelBaseURL/avr-headers-$version_headers.zip"
-getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz"
+atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-GNU-Toolchain/$atmelToolchainVersion"
+# always download packages from Atmel, they sometimes update patches without updating the package name
+getPackage "$atmelBaseURL/avr-binutils-$version_binutils.tar.gz" alwaysDownload
+getPackage "$atmelBaseURL/avr-gcc-$version_gcc.tar.gz" alwaysDownload
+getPackage "$atmelBaseURL/avr-headers-$version_headers.zip" alwaysDownload
+getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz" alwaysDownload
 # We do not fetch patches available in this directory because they are already applied
+
 #getPackage http://ftp.sunet.se/pub/gnu/gcc/releases/gcc-"$version_gcc3"/gcc-"$version_gcc3".tar.bz2
 
 getPackage http://ftp.sunet.se/pub/gnu/make/make-"$version_make".tar.bz2
