@@ -1,7 +1,17 @@
 diff -ruwN avr-libc-1.8.0.orig/include/avr/iotn4313.h avr-libc-1.8.0/include/avr/iotn4313.h
 --- include/avr/iotn4313.h	2011-12-29 09:51:50.000000000 +0100
 +++ include/avr/iotn4313.h	2013-02-11 23:16:25.000000000 +0100
-@@ -303,7 +303,7 @@
+@@ -68,7 +68,8 @@
+ #define USBS 3
+ #define UPM0 4
+ #define UPM1 5
+-#define UMSEL 6
++#define UMSEL0 6
++#define UMSEL1 7
+ 
+ #define PCMSK1 _SFR_IO8(0x004)
+ #define PCINT8 0
+@@ -303,7 +304,7 @@
  #define EEAR5 5
  #define EEAR6 6
  
@@ -10,7 +20,7 @@ diff -ruwN avr-libc-1.8.0.orig/include/avr/iotn4313.h avr-libc-1.8.0/include/avr
  #define PCINT0 0
  #define PCINT1 1
  #define PCINT2 2
-@@ -528,13 +528,17 @@
+@@ -528,13 +529,17 @@
  #define OCIE1A 6
  #define TOIE1 7
  
@@ -31,7 +41,7 @@ diff -ruwN avr-libc-1.8.0.orig/include/avr/iotn4313.h avr-libc-1.8.0/include/avr
  #define INT0 6
  #define INT1 7
  
-@@ -563,12 +567,12 @@
+@@ -563,12 +568,12 @@
  #define TIMER1_OVF_vect      _VECTOR(5)  /* Timer/Counter1 Overflow */
  #define TIMER0_OVF_vect_num  6
  #define TIMER0_OVF_vect      _VECTOR(6)  /* Timer/Counter0 Overflow */
@@ -50,7 +60,7 @@ diff -ruwN avr-libc-1.8.0.orig/include/avr/iotn4313.h avr-libc-1.8.0/include/avr
  #define ANA_COMP_vect_num  10
  #define ANA_COMP_vect      _VECTOR(10)  /* Analog Comparator */
  #define PCINT_B_vect_num  11
-@@ -583,14 +587,14 @@
+@@ -583,14 +588,14 @@
  #define USI_START_vect      _VECTOR(15)  /* USI Start Condition */
  #define USI_OVERFLOW_vect_num  16
  #define USI_OVERFLOW_vect      _VECTOR(16)  /* USI Overflow */
