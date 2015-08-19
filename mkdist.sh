@@ -9,30 +9,33 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20131216
+pkgVersion=20170210
 
-version_automake=1.11.1 # required by binutils
-version_gdb=7.6.1
-version_gmp=4.3.2
+# Build dependencies
+version_automake=1.15
+version_autoconf=2.68
+
+version_gdb=7.12
+version_gmp=6.1.2
 version_mpfr=3.1.2
 version_mpc=1.0
 version_ppl=0.12.1
 version_cloog=0.16.2
-version_autoconf=2.64   # required by binutils
-version_libusb=1.0.9
+version_libusb=1.0.21
+version_libusb_compat=0.1.5
 version_avarice=2.13
-version_avrdude=6.0.1
+version_avrdude=6.3
 version_simulavr=0.1.2.7
 # simulavr-1.0.0 does not compile
 # We want to add simavr to the distribution, but it does not compile easily...
 
 # The following packages are fetched from Atmel:
-atmelToolchainVersion=3.4.3
-version_binutils=2.23.2
-version_gcc=4.8.1
+atmelToolchainVersion=3.5.4
+version_binutils=2.26.20160125
+version_gcc=4.9.2
 #version_gcc3=3.4.6
-version_headers=6.2.0.142
-version_avrlibc=1.8.0
+#version_headers=???
+version_avrlibc=2.0.0
 
 debug=false
 if [ "$1" = debug ]; then
@@ -81,10 +84,11 @@ fi
 ###############################################################################
 
 # download a package and unpack it
-getPackage() # <package-name> <alwaysDownload>
+getPackage() # <url> <alwaysDownload> <package-name>
 {
     url="$1"
     package=$(basename "$url")
+    [ "$3" ] && package="$3"
     doDownload=no
     if [ ! -f "packages/$package" ]; then
         doDownload=yes      # not yet downloaded
@@ -198,7 +202,7 @@ applyPatches()  # <package-name>
 unpackPackage() # <package-name>
 {
     name="$1"
-    archive=$(echo "packages/$name"* | awk '{print $1}')    # wildcard expands to compression extension
+    archive=$(ls "packages/$name"* | grep -E "$name\..+$")    # wildcard expands to compression extension
     extension=$(echo "$archive" | awk -F . '{print $NF}')
     zipOption="-z"
     if [ "$extension" = "bz2" ]; then
@@ -230,7 +234,7 @@ unpackPackage() # <package-name>
 
 mergeAVRHeaders()
 {
-    for i in "../avr8-headers-$version_headers"/io?*.h; do
+    for i in "../avr8-headers"/io?*.h; do
         # iotn4313.h is broken in atmel's header package AND in avr-libc-1.8.0. Our
         # build mechanism allows to apply a patch to avr-libc-1.8.0 (since it has the
         # standard configure/make procedure), but not to Atmel's headers. We therefore
@@ -241,7 +245,7 @@ mergeAVRHeaders()
             cp -f "$i" include/avr/
         fi
     done
-    if [ -f "../avr8-headers-$version_headers/io.h" ]; then
+    if [ -f "../avr8-headers/io.h" ]; then
         # We must merge the conditional includes of both versions of io.h since we
         # want to build a superset:
         awk 'BEGIN {
@@ -285,7 +289,7 @@ mergeAVRHeaders()
                     print lines[i];
                 }
             }
-        ' "../avr8-headers-$version_headers/io.h" include/avr/io.h > include/avr/io.h.new
+        ' "../avr8-headers/io.h" include/avr/io.h > include/avr/io.h.new
         mv -f include/avr/io.h.new include/avr/io.h
     fi
 }
@@ -452,31 +456,31 @@ echo "Starting download at $(date +"%Y-%m-%d %H:%M:%S")"
 
 atmelBaseURL="http://distribute.atmel.no/tools/opensource/Atmel-AVR-GNU-Toolchain/$atmelToolchainVersion"
 # always download packages from Atmel, they sometimes update patches without updating the package name
-getPackage "$atmelBaseURL/avr-binutils-$version_binutils.tar.gz" alwaysDownload
-getPackage "$atmelBaseURL/avr-gcc-$version_gcc.tar.gz" alwaysDownload
-getPackage "$atmelBaseURL/avr8-headers-$version_headers.zip" alwaysDownload
-getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz" alwaysDownload
+getPackage "$atmelBaseURL/avr-binutils.tar.bz2" alwaysDownload "avr-binutils-$version_binutils.tar.bz2"
+getPackage "$atmelBaseURL/avr-gcc.tar.bz2" alwaysDownload "avr-gcc-$version_gcc.tar.bz2"
+getPackage "$atmelBaseURL/avr8-headers.zip" alwaysDownload
+getPackage "$atmelBaseURL/avr-libc.tar.bz2" alwaysDownload "avr-libc-$version_avrlibc.tar.bz2"
 # We do not fetch patches available in this directory because they are already applied
 
 #getPackage http://ftp.sunet.se/pub/gnu/gcc/releases/gcc-"$version_gcc3"/gcc-"$version_gcc3".tar.bz2
 
-getPackage http://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
-getPackage https://gmplib.org/download/gmp/archive/gmp-"$version_gmp".tar.bz2
+getPackage https://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
+getPackage https://gmplib.org/download/gmp/gmp-"$version_gmp".tar.bz2
 getPackage https://ftp.gnu.org/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
 getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
 # We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
 #getPackage http://bugseng.com/products/ppl/download/ftp/releases/"$version_ppl"/ppl-"$version_ppl".tar.bz2
 #getPackage http://gcc.cybermirror.org/infrastructure/cloog-"$version_cloog".tar.gz
-getPackage http://ftp.gnu.org/gnu/autoconf/autoconf-"$version_autoconf".tar.gz
-getPackage https://ftp.gnu.org/gnu/gdb/gdb-"$version_gdb".tar.bz2
+getPackage https://ftp.gnu.org/gnu/autoconf/autoconf-"$version_autoconf".tar.gz
+getPackage https://ftp.gnu.org/gnu/gdb/gdb-"$version_gdb".tar.gz
 getPackage http://downloads.sourceforge.net/avarice/avarice-"$version_avarice".tar.bz2
-getPackage https://download.savannah.gnu.org/releases/avr-libc/old-releases/avr-libc-manpages-"$version_avrlibc".tar.bz2
-getPackage https://download.savannah.gnu.org/releases/avr-libc/old-releases/avr-libc-user-manual-"$version_avrlibc".tar.bz2
+getPackage https://download.savannah.gnu.org/releases/avr-libc/avr-libc-manpages-"$version_avrlibc".tar.bz2
+getPackage https://download.savannah.gnu.org/releases/avr-libc/avr-libc-user-manual-"$version_avrlibc".tar.bz2
 getPackage http://downloads.sourceforge.net/project/libusb/libusb-1.0/libusb-"$version_libusb"/libusb-"$version_libusb".tar.bz2
-getPackage http://downloads.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/0.1.12/libusb-0.1.12.tar.gz
-getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-"$version_avrdude".tar.gz
-getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-doc-"$version_avrdude".tar.gz
-getPackage http://download.savannah.gnu.org/releases/simulavr/simulavr-"$version_simulavr".tar.gz
+getPackage http://downloads.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-"$version_libusb_compat"/libusb-compat-"$version_libusb_compat".tar.bz2
+getPackage https://download.savannah.gnu.org/releases/avrdude/avrdude-"$version_avrdude".tar.gz
+getPackage https://download.savannah.gnu.org/releases/avrdude/avrdude-doc-"$version_avrdude".tar.gz
+getPackage https://download.savannah.gnu.org/releases/simulavr/simulavr-"$version_simulavr".tar.gz
 
 installdir="$(pwd)/temporary-install"
 if [ ! -d "$installdir" ]; then
@@ -516,7 +520,9 @@ rm -f "$installdir/lib/"*.dylib # ensure we have no shared libs
     for arch in i386 x86_64; do
         buildCFLAGS="$commonCFLAGS -arch $arch"
         buildPackage libusb-"$version_libusb" "$prefix/lib/libusb-1.0.a" --disable-shared
-        buildPackage libusb-0.1.12 "$prefix/lib/libusb.a" --disable-shared
+        export LIBUSB_1_0_CFLAGS="-I$prefix/include/libusb-1.0"
+        export LIBUSB_1_0_LIBS="-lusb"
+        buildPackage libusb-compat-"$version_libusb_compat" "$prefix/lib/libusb.a" --disable-shared
         rm -f "$prefix/lib"/libusb*.dylib
         for file in "$prefix/lib"/libusb*.a; do
             if [ "$file" != "$prefix/lib/libusb*.a" ]; then
@@ -573,8 +579,8 @@ buildPackage avr-gcc-"$version_gcc" "$prefix/bin/avr-gcc" --target=avr --enable-
 #########################################################################
 # avr-libc
 #########################################################################
-unpackPackage "avr8-headers-$version_headers"
-buildPackage avr-libc-"$version_avrlibc" "$prefix/avr/lib/libc.a" --host=avr
+unpackPackage "avr8-headers"
+buildPackage avr-libc-"$version_avrlibc" "$prefix/avr/lib/libc.a" --host=avr --enable-device-lib
 copyPackage avr-libc-user-manual-"$version_avrlibc" "$prefix/doc/avr-libc"
 copyPackage avr-libc-manpages-"$version_avrlibc" "$prefix/man"
 
@@ -754,7 +760,7 @@ cat >"$prefix/bin/avr-project" <<-EOF
 		} 1>&2
 		exit 0;
 	fi
-	
+
 	name=\$(basename "\$1")
 	dir=\$(dirname "\$1")
 	cd "\$dir"
