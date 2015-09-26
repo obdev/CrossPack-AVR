@@ -98,6 +98,13 @@ getPackage() # <package-name> <alwaysDownload>
         echo "=== Downloading package $package"
         rm -f "packages/$package"
         curl --location --progress-bar -o "packages/$package" "$url"
+        if [ $? -ne 0 ] || file "packages/$package" | grep -q HTML; then
+            echo "################################################################################"
+            echo "Failed to download $url"
+            echo "################################################################################"
+            rm -f "packages/$package"
+            exit 1
+        fi
     fi
 }
 
