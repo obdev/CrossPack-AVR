@@ -456,7 +456,7 @@ getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz" alwaysDownload
 
 getPackage http://ftp.sunet.se/pub/gnu/make/make-"$version_make".tar.bz2
 getPackage http://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
-getPackage http://ftp.gmplib.org/gmp/gmp-"$version_gmp".tar.bz2
+getPackage https://gmplib.org/download/gmp/archive/gmp-"$version_gmp".tar.bz2
 getPackage http://ftp.sunet.se/pub/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
 getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
 # We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
@@ -467,8 +467,8 @@ getPackage http://ftp.sunet.se/pub/gnu/gdb/gdb-"$version_gdb".tar.bz2
 getPackage http://downloads.sourceforge.net/avarice/avarice-"$version_avarice".tar.bz2
 getPackage http://download.savannah.gnu.org/releases/avr-libc/avr-libc-manpages-"$version_avrlibc".tar.bz2
 getPackage http://download.savannah.gnu.org/releases/avr-libc/avr-libc-user-manual-"$version_avrlibc".tar.bz2
-getPackage http://switch.dl.sourceforge.net/project/libusb/libusb-1.0/libusb-"$version_libusb"/libusb-"$version_libusb".tar.bz2
-getPackage http://switch.dl.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/0.1.12/libusb-0.1.12.tar.gz
+getPackage http://downloads.sourceforge.net/project/libusb/libusb-1.0/libusb-"$version_libusb"/libusb-"$version_libusb".tar.bz2
+getPackage http://downloads.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/0.1.12/libusb-0.1.12.tar.gz
 getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-"$version_avrdude".tar.gz
 getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-doc-"$version_avrdude".tar.gz
 getPackage http://download.savannah.gnu.org/releases/simulavr/simulavr-"$version_simulavr".tar.gz
