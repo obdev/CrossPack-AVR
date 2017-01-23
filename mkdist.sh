@@ -46,7 +46,7 @@ configureArgs="--disable-dependency-tracking --disable-nls --disable-werror"
 umask 0022
 
 xcodepath="$(xcode-select -print-path)"
-sysroot="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"
+sysroot="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
 
 # Do not include original PATH in our PATH to ensure that third party stuff is not found
 PATH="$prefix/bin:$xcodepath/usr/bin:$xcodepath/Toolchains/XcodeDefault.xctoolchain/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -454,19 +454,19 @@ getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz" alwaysDownload
 
 #getPackage http://ftp.sunet.se/pub/gnu/gcc/releases/gcc-"$version_gcc3"/gcc-"$version_gcc3".tar.bz2
 
-getPackage http://ftp.sunet.se/pub/gnu/make/make-"$version_make".tar.bz2
+getPackage https://ftp.gnu.org/gnu/make/make-"$version_make".tar.bz2
 getPackage http://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
 getPackage https://gmplib.org/download/gmp/archive/gmp-"$version_gmp".tar.bz2
-getPackage http://ftp.sunet.se/pub/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
+getPackage https://ftp.gnu.org/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
 getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
 # We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
 #getPackage http://bugseng.com/products/ppl/download/ftp/releases/"$version_ppl"/ppl-"$version_ppl".tar.bz2
 #getPackage http://gcc.cybermirror.org/infrastructure/cloog-"$version_cloog".tar.gz
 getPackage http://ftp.gnu.org/gnu/autoconf/autoconf-"$version_autoconf".tar.gz
-getPackage http://ftp.sunet.se/pub/gnu/gdb/gdb-"$version_gdb".tar.bz2
+getPackage https://ftp.gnu.org/gnu/gdb/gdb-"$version_gdb".tar.bz2
 getPackage http://downloads.sourceforge.net/avarice/avarice-"$version_avarice".tar.bz2
-getPackage http://download.savannah.gnu.org/releases/avr-libc/avr-libc-manpages-"$version_avrlibc".tar.bz2
-getPackage http://download.savannah.gnu.org/releases/avr-libc/avr-libc-user-manual-"$version_avrlibc".tar.bz2
+getPackage https://download.savannah.gnu.org/releases/avr-libc/old-releases/avr-libc-manpages-"$version_avrlibc".tar.bz2
+getPackage https://download.savannah.gnu.org/releases/avr-libc/old-releases/avr-libc-user-manual-"$version_avrlibc".tar.bz2
 getPackage http://downloads.sourceforge.net/project/libusb/libusb-1.0/libusb-"$version_libusb"/libusb-"$version_libusb".tar.bz2
 getPackage http://downloads.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/0.1.12/libusb-0.1.12.tar.gz
 getPackage http://download.savannah.gnu.org/releases/avrdude/avrdude-"$version_avrdude".tar.gz
