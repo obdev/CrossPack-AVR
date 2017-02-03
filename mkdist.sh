@@ -11,7 +11,6 @@ pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
 pkgVersion=20131216
 
-version_make=4.0
 version_automake=1.11.1 # required by binutils
 version_gdb=7.6.1
 version_gmp=4.3.2
@@ -461,7 +460,6 @@ getPackage "$atmelBaseURL/avr-libc-$version_avrlibc.tar.gz" alwaysDownload
 
 #getPackage http://ftp.sunet.se/pub/gnu/gcc/releases/gcc-"$version_gcc3"/gcc-"$version_gcc3".tar.bz2
 
-getPackage https://ftp.gnu.org/gnu/make/make-"$version_make".tar.bz2
 getPackage http://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
 getPackage https://gmplib.org/download/gmp/archive/gmp-"$version_gmp".tar.bz2
 getPackage https://ftp.gnu.org/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
@@ -514,7 +512,6 @@ rm -f "$installdir/lib/"*.dylib # ensure we have no shared libs
 #########################################################################
 # additional goodies
 #########################################################################
-buildPackage make-"$version_make" "$prefix/bin/make"
 (
     for arch in i386 x86_64; do
         buildCFLAGS="$commonCFLAGS -arch $arch"
