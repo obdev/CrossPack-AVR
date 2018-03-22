@@ -467,7 +467,7 @@ getPackage "$atmelBaseURL/avr-libc.tar.bz2" alwaysDownload "avr-libc-$version_av
 getPackage https://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
 getPackage https://gmplib.org/download/gmp/gmp-"$version_gmp".tar.bz2
 getPackage https://ftp.gnu.org/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
-getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
+getPackage http://www.multiprecision.org/downloads/mpc-"$version_mpc".tar.gz
 # We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
 #getPackage http://bugseng.com/products/ppl/download/ftp/releases/"$version_ppl"/ppl-"$version_ppl".tar.bz2
 #getPackage http://gcc.cybermirror.org/infrastructure/cloog-"$version_cloog".tar.gz
