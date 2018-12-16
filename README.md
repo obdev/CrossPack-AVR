@@ -1,3 +1,9 @@
+**NOTE:** This fork updates components to support the latest ATTiny chips
+https://www.microchip.com/design-centers/8-bit/avr-mcus/device-selection/attiny3217
+In particular, this has been tested with an ATTiny1614 chip.
+
+
+
 CrossPack for AVR Development is a development environment for Atmel's AVR
 microcontrollers running on Apple's OS X, similar to AVR Studio on Windows.
 It consists of the GNU compiler suite, a C library for the AVR, the AVRDUDE
