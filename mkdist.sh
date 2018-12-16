@@ -9,19 +9,19 @@
 pkgUnixName=CrossPack-AVR
 pkgPrettyName="CrossPack for AVR Development"
 pkgUrlName=crosspack    # name used for http://www.obdev.at/$pkgUrlName
-pkgVersion=20170210
+pkgVersion=20180525
 
 # Build dependencies
-version_automake=1.15
-version_autoconf=2.68
+version_automake=1.16.1
+version_autoconf=2.69
 
-version_gdb=7.12
+version_gdb=8.1
 version_gmp=6.1.2
-version_mpfr=3.1.2
-version_mpc=1.0
+version_mpfr=4.0.1
+version_mpc=1.1.0
 version_ppl=0.12.1
 version_cloog=0.16.2
-version_libusb=1.0.21
+version_libusb=1.0.22
 version_libusb_compat=0.1.5
 version_avarice=2.13
 version_avrdude=6.3
@@ -30,9 +30,9 @@ version_simulavr=0.1.2.7
 # We want to add simavr to the distribution, but it does not compile easily...
 
 # The following packages are fetched from Atmel:
-atmelToolchainVersion=3.5.4
+atmelToolchainVersion=3.6.1
 version_binutils=2.26.20160125
-version_gcc=4.9.2
+version_gcc=5.4.0
 #version_gcc3=3.4.6
 #version_headers=???
 version_avrlibc=2.0.0
@@ -42,7 +42,7 @@ if [ "$1" = debug ]; then
     debug=true
 fi
 
-prefix="/usr/local/$pkgUnixName-$pkgVersion"
+prefix="/Users/dwatson/work/tmp/$pkgUnixName-$pkgVersion"
 configureArgs="--disable-dependency-tracking --disable-nls --disable-werror"
 
 umask 0022
@@ -467,7 +467,7 @@ getPackage "$atmelBaseURL/avr-libc.tar.bz2" alwaysDownload "avr-libc-$version_av
 getPackage https://ftp.gnu.org/gnu/automake/automake-"$version_automake".tar.gz
 getPackage https://gmplib.org/download/gmp/gmp-"$version_gmp".tar.bz2
 getPackage https://ftp.gnu.org/gnu/mpfr/mpfr-"$version_mpfr".tar.bz2
-getPackage http://www.multiprecision.org/mpc/download/mpc-"$version_mpc".tar.gz
+getPackage http://www.multiprecision.org/downloads/mpc-"$version_mpc".tar.gz
 # We would like to compile with cloog, but linking 32 bit C++ code fails with clang.
 #getPackage http://bugseng.com/products/ppl/download/ftp/releases/"$version_ppl"/ppl-"$version_ppl".tar.bz2
 #getPackage http://gcc.cybermirror.org/infrastructure/cloog-"$version_cloog".tar.gz
